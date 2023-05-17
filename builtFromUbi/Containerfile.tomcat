@@ -1,0 +1,37 @@
+##
+## Sample build command:
+## time podman build -f Containerfile.tomcat -t localhost/itrzzs/tomcat-9.0.75:$(date +"%Y.%V") --build-arg JAVA_BASEIMAGE="localhost/itrzzs/java11:2023.20" --build-arg TOMCAT_VERSION="9.0.75" . 2>&1
+##
+## Install tomcat following: https://computingforgeeks.com/install-apache-tomcat-9-on-linux-rhel-centos/?utm_content=cmp-true
+
+FROM ${JAVA_BASEIMAGE}
+
+ARG JAVA_BASEIMAGE
+ARG TOMCAT_VERSION
+ARG TOMCAT_BASE_DIR="/opt/tomcat"
+
+LABEL JAVA_BASEIMAGE=${JAVA_BASEIMAGE}
+LABEL TOMCAT_VERSION=${TOMCAT_VERSION}
+LABEL TOMCAT_BASE_DIR=${TOMCAT_BASE_DIR}
+
+RUN     mkdir -p ${TOMCAT_BASE_DIR} && \
+        useradd -d ${TOMCAT_BASE_DIR} -s /bin/nologin tomcat && \
+        chown -R tomcat:tomcat ${TOMCAT_BASE_DIR}
+
+USER    tomcat
+
+RUN     curl -L -o /tmp/apache-tomcat-${TOMCAT_VERSION}.tar.gz https://dlcdn.apache.org/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz && \
+        tar -C /tmp -zxf /tmp/apache-tomcat-${TOMCAT_VERSION}.tar.gz && \
+        rm -rf /tmp/apache-tomcat-${TOMCAT_VERSION}.tar.gz && \
+        mv /tmp/apache-tomcat-${TOMCAT_VERSION}/* ${TOMCAT_BASE_DIR}
+
+ENV     JAVA_OPTS=-Djava.awt.headless=true
+ENV     CATALINA_HOME=${TOMCAT_BASE_DIR}
+ENV     CATALINA_BASE=${TOMCAT_BASE_DIR}
+ENV     CATALINA_PID=${TOMCAT_BASE_DIR}/temp/tomcat.pid
+
+EXPOSE 8080
+EXPOSE 8443
+
+##### CMD     ["/usr/bin/bash", "/opt/tomcat/bin/catalina.sh", "run"]
+CMD     ["/usr/bin/bash", "-c", "${CATALINA_HOME}/bin/catalina.sh run"]

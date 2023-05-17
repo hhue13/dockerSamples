@@ -1,0 +1,50 @@
+##
+## Sample build command:
+## time podman build -f Containerfile.tomcat -t localhost/itrzzs/openjdk-17-tomcat:$(date +"%Y.%V") --build-arg JAVA_BASEIMAGE="registry.access.redhat.com/ubi9/openjdk-17:1.14-2.1681917140" --build-arg IMAGE_USER="default" . 2>&1
+##
+## podman run -d --name myTomcat -p 8080:8080 localhost/itrzzs/openjdk-17-tomcat:2023.20
+## http://localhost:8080/manager/html
+
+FROM ${JAVA_BASEIMAGE}
+
+ARG JAVA_BASEIMAGE
+ARG IMAGE_USER="default"
+
+LABEL JAVA_BASEIMAGE=${JAVA_BASEIMAGE}
+
+USER    root
+
+RUN     microdnf -y install gzip \
+        less \
+        net-tools \
+        procps \
+        tar \
+        tomcat \
+        tomcat-webapps \
+        tomcat-admin-webapps \
+        vi \
+        xmlstarlet && \
+        microdnf -y update && \
+        microdnf clean all && \
+        chgrp root /etc/tomcat/tomcat-users.xml && \
+        chown -R ${IMAGE_USER}:root /var/cache/tomcat && \
+        chown -R ${IMAGE_USER}:root /var/lib/tomcat && \
+        chown -R ${IMAGE_USER}:root /var/log/tomcat && \
+        xmlstarlet ed -L -d '/Context/Valve[contains(@className, "org.apache.catalina.valves.RemoteAddrValve")]' /var/lib/tomcat/webapps/manager/META-INF/context.xml && \
+        xmlstarlet ed -L -d '/Context/Valve[contains(@className, "org.apache.catalina.valves.RemoteAddrValve")]' /var/lib/tomcat/webapps/host-manager/META-INF/context.xml
+
+COPY    conf/tomcat-users.xml /etc/tomcat/tomcat-users.xml
+
+USER    ${IMAGE_USER}
+
+ENV     TOMCAT_CFG_LOADED="1"
+ENV     TOMCATS_BASE="/var/lib/tomcats/"
+ENV     CATALINA_HOME="/usr/share/tomcat"
+ENV     CATALINA_TMPDIR="/var/cache/tomcat/temp"
+ENV     JAVA_OPTS="-Djava.awt.headless=true"
+ENV     SECURITY_MANAGER="false"
+
+EXPOSE 8080
+EXPOSE 8443
+
+CMD     ["/usr/bin/bash", "-c", "/usr/libexec/tomcat/server start"]
