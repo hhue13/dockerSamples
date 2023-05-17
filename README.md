@@ -7,7 +7,7 @@ When working with RedHat UBI Images you can load the from the following registri
 
 - [Anonymous registry](registry.access.redhat.com)
 - [Authenticated registry](registry.redhat.io). It is recommended to use a [RedHat registry service account](https://access.redhat.com/terms-based-registry/) for authentication. To login run
-        podman login -u='<org>|<user>' -p=<token> registry.redhat.io
+        ```podman login -u='<org>|<user>' -p=<token> registry.redhat.io```
 
 ## Building the Tomcat images starting with the ubi image
 If you want to build the images yourself starting with the ubi image please see the following [README.md](builtFromUbi/README.md)

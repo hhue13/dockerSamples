@@ -22,7 +22,7 @@ LABEL REL_BASEIMAGE=${REL_BASEIMAGE}
 LABEL JAVA_VERSION=${JAVA_VERSION}
 
 
-RUN 	microdnf -y install tar \
+RUN 	microdnf --setopt=install_weak_deps=0 -y install tar \
         gzip \
         net-tools \
         procps \

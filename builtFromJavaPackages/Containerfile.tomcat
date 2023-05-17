@@ -14,7 +14,7 @@ LABEL JAVA_BASEIMAGE=${JAVA_BASEIMAGE}
 
 USER    root
 
-RUN     microdnf -y install gzip \
+RUN     microdnf --setopt=install_weak_deps=0 -y install gzip \
         less \
         net-tools \
         procps \
@@ -24,7 +24,7 @@ RUN     microdnf -y install gzip \
         tomcat-admin-webapps \
         vi \
         xmlstarlet && \
-        microdnf -y update && \
+        microdnf --setopt=install_weak_deps=0 -y update && \
         microdnf clean all && \
         chgrp root /etc/tomcat/tomcat-users.xml && \
         chown -R ${IMAGE_USER}:root /var/cache/tomcat && \
