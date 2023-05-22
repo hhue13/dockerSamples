@@ -1,6 +1,6 @@
 ##
 ## Sample build command:
-## time podman build -f Containerfile.tomcat -t localhost/itrzzs/tomcat-9.0.75:$(date +"%Y.%V") --build-arg JAVA_BASEIMAGE="localhost/itrzzs/java11:2023.20" --build-arg TOMCAT_VERSION="9.0.75" . 2>&1
+## time podman build -f Containerfile.tomcat -t localhost/itrzzs/tomcat-9.0.75-java11:$(date +"%Y.%V") --build-arg JAVA_BASEIMAGE="localhost/itrzzs/java11:2023.20" --build-arg TOMCAT_VERSION="9.0.75" . 2>&1
 ##
 ## Install tomcat following: https://computingforgeeks.com/install-apache-tomcat-9-on-linux-rhel-centos/?utm_content=cmp-true
 
@@ -15,8 +15,8 @@ LABEL TOMCAT_VERSION=${TOMCAT_VERSION}
 LABEL TOMCAT_BASE_DIR=${TOMCAT_BASE_DIR}
 
 RUN     mkdir -p ${TOMCAT_BASE_DIR} && \
-        useradd -d ${TOMCAT_BASE_DIR} -s /bin/nologin tomcat && \
-        chown -R tomcat:tomcat ${TOMCAT_BASE_DIR}
+        useradd -g root -d ${TOMCAT_BASE_DIR} -s /bin/nologin tomcat && \
+        chown -R tomcat:root ${TOMCAT_BASE_DIR}
 
 USER    tomcat
 
@@ -24,6 +24,14 @@ RUN     curl -L -o /tmp/apache-tomcat-${TOMCAT_VERSION}.tar.gz https://dlcdn.apa
         tar -C /tmp -zxf /tmp/apache-tomcat-${TOMCAT_VERSION}.tar.gz && \
         rm -rf /tmp/apache-tomcat-${TOMCAT_VERSION}.tar.gz && \
         mv /tmp/apache-tomcat-${TOMCAT_VERSION}/* ${TOMCAT_BASE_DIR}
+
+USER root
+
+RUN     find ${TOMCAT_BASE_DIR} -type d ! -name bin ! -name lib ! -name webapps ! -name conf -exec chmod g+rwx {} \; && \
+        chmod g+rx ${TOMCAT_BASE_DIR}/conf && \
+        chmod g+r ${TOMCAT_BASE_DIR}/conf/*
+
+USER    tomcat
 
 ENV     JAVA_OPTS=-Djava.awt.headless=true
 ENV     CATALINA_HOME=${TOMCAT_BASE_DIR}
