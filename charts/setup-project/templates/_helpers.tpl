@@ -459,9 +459,7 @@ spec:
       - namespaceSelector:
           matchLabels:
             kubernetes.io/metadata.name: openshift-kube-apiserver-operator
-        podSelector:
-          matchLabels:
-            app: kube-apiserver-operator
+  podSelector: {}
   policyTypes:
     - Ingress
 ---
