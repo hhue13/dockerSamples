@@ -41,8 +41,10 @@ we check for default role bindings
 
 {{- if $isEnabled }}
   {{- if $top.Values.defaultSettings.roleSettings }}
-    {{- if $top.Values.defaultSettings.roleSettings.roleBindings }}
-      {{- $roleBindings = $top.Values.defaultSettings.roleSettings.roleBindings }}
+    {{- if $top.Values.defaultSettings.roleSettings.enabled }}
+      {{- if $top.Values.defaultSettings.roleSettings.roleBindings }}
+        {{- $roleBindings = $top.Values.defaultSettings.roleSettings.roleBindings }}
+      {{- end }}
     {{- end }}
   {{- end }}
 
@@ -106,8 +108,10 @@ Create the resource quota entries
 
 {{- if $isEnabled }}
   {{- if $top.Values.defaultSettings.resources }}
-    {{- if $top.Values.defaultSettings.resources.quota }}
-      {{- $resourceQuota = $top.Values.defaultSettings.resources.quota }}
+    {{- if $top.Values.defaultSettings.resources.enabled }}
+      {{- if $top.Values.defaultSettings.resources.quota }}
+        {{- $resourceQuota = $top.Values.defaultSettings.resources.quota }}
+      {{- end }}
     {{- end }}
   {{- end }}
 
@@ -161,16 +165,19 @@ via the defaults or the project definition
 
 {{- if $isEnabled }}
   {{- if $top.Values.defaultSettings.networkSettings }}
-    {{- if $top.Values.defaultSettings.networkSettings.networkPolicies }}
-      {{- $networkPolicies = $top.Values.defaultSettings.networkSettings.networkPolicies }}
+    {{- if $top.Values.defaultSettings.networkSettings.enabled }}
+      {{- if $top.Values.defaultSettings.networkSettings.networkPolicies }}
+        {{- $networkPolicies = $top.Values.defaultSettings.networkSettings.networkPolicies }}
+      {{- end }}
     {{- end }}
   {{- end }}
 
   {{- if $current.networkSettings }}
     {{- if $current.networkSettings.networkPolicies }}
-      {{- $networkPolicies = $current.networkPolicies }}
+      {{- $networkPolicies = $current.networkSettings.networkPolicies }}
     {{- end }}
   {{- end }}
+
 
 {{/*
 Ingress rules
@@ -182,7 +189,7 @@ Ingress rules
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-from-namespace-{{ .namespace }}
+  name: "{{ $currentProjectname }}-allow-from-namespace-{{ .namespace }}"
   namespace: "{{ $currentProjectname }}"
   labels:
 {{- include "create-labels" (list $top.Chart $top.Release $top.Values ) | indent 4 }}
@@ -222,7 +229,7 @@ Ingress podSelector rules
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-from-pod-{{ .podName }}
+  name: "{{ $currentProjectname }}-allow-from-pod-{{ .podName }}"
   namespace: "{{ $currentProjectname }}"
   labels:
 {{- include "create-labels" (list $top.Chart $top.Release $top.Values ) | indent 4 }}
@@ -264,7 +271,7 @@ Egress namespace rules
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-to-namespace-{{ .namespace }}
+  name: "{{ $currentProjectname }}-allow-to-namespace-{{ .namespace }}"
   namespace: "{{ $currentProjectname }}"
   labels:
 {{- include "create-labels" (list $top.Chart $top.Release $top.Values ) | indent 4 }}
@@ -304,7 +311,7 @@ Egress podSelector rules
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-to-pod-{{ .podName }}
+  name: "{{ $currentProjectname }}-allow-to-pod-{{ .podName }}"
   namespace: "{{ $currentProjectname }}"
   labels:
 {{- include "create-labels" (list $top.Chart $top.Release $top.Values ) | indent 4 }}
@@ -344,7 +351,7 @@ Egress CIDRs rules
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-to-ip-{{ .cidrName }}
+  name: "{{ $currentProjectname }}-allow-to-ip-{{ .cidrName }}"
   namespace: "{{ $currentProjectname }}"
   labels:
 {{- include "create-labels" (list $top.Chart $top.Release $top.Values ) | indent 4 }}
@@ -546,8 +553,10 @@ Create the limitRange entries
 
 {{- if $isEnabled }}
   {{- if $top.Values.defaultSettings.limitRanges }}
-    {{- if $top.Values.defaultSettings.limitRanges.limits }}
-      {{- $limitRanges = $top.Values.defaultSettings.limitRanges.limits }}
+    {{- if $top.Values.defaultSettings.limitRanges.enabled }}
+      {{- if $top.Values.defaultSettings.limitRanges.limits }}
+        {{- $limitRanges = $top.Values.defaultSettings.limitRanges.limits }}
+      {{- end }}
     {{- end }}
   {{- end }}
 
