@@ -381,7 +381,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-from-to-same-namespace
+  name: "{{ $currentProjectname }}-allow-from-to-same-namespace"
   namespace: "{{ $currentProjectname }}"
   labels:
 {{- include "create-labels" (list $top.Chart $top.Release $top.Values ) | indent 4 }}
@@ -397,7 +397,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-from-openshift-ingress
+  name: "{{ $currentProjectname }}-allow-from-openshift-ingress"
   namespace: "{{ $currentProjectname }}"
   labels:
 {{- include "create-labels" (list $top.Chart $top.Release $top.Values ) | indent 4 }}
@@ -414,7 +414,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-from-router
+  name: "{{ $currentProjectname }}-allow-from-router"
   namespace: "{{ $currentProjectname }}"
   labels:
 {{- include "create-labels" (list $top.Chart $top.Release $top.Values ) | indent 4 }}
@@ -431,7 +431,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-from-hostnetwork
+  name: "{{ $currentProjectname }}-allow-from-hostnetwork"
   namespace: "{{ $currentProjectname }}"
   labels:
 {{- include "create-labels" (list $top.Chart $top.Release $top.Values ) | indent 4 }}
@@ -449,7 +449,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-from-kube-apiserver-operator
+  name: "{{ $currentProjectname }}-allow-from-kube-apiserver-operator"
   namespace: "{{ $currentProjectname }}"
   labels:
 {{- include "create-labels" (list $top.Chart $top.Release $top.Values ) | indent 4 }}
@@ -466,7 +466,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-from-openshift-monitoring
+  name: "{{ $currentProjectname }}-allow-from-openshift-monitoring"
   namespace: "{{ $currentProjectname }}"
   labels:
 {{- include "create-labels" (list $top.Chart $top.Release $top.Values ) | indent 4 }}
@@ -483,7 +483,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-openshift-logging
+  name: "{{ $currentProjectname }}-allow-openshift-logging"
   namespace: "{{ $currentProjectname }}"
   labels:
 {{- include "create-labels" (list $top.Chart $top.Release $top.Values ) | indent 4 }}
@@ -507,7 +507,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: deny-all-by-default
+  name: "{{ $currentProjectname }}-deny-all-by-default"
   namespace: "{{ $currentProjectname }}"
   labels:
 {{- include "create-labels" (list $top.Chart $top.Release $top.Values ) | indent 4 }}
