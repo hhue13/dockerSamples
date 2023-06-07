@@ -47,7 +47,7 @@ defaultSettings:
           - name: "developer"
             type: "User"
   networkSettings:
-    enabled: true
+    enabled: false
     networkPolicies:
       ingress:
         fromNamespaces:
