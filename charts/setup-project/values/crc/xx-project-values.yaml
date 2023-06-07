@@ -1,0 +1,53 @@
+######################################################################################################################################
+##
+## Values file to configure projects
+##
+## Documentation references:
+## LimitRanges: https://docs.openshift.com/container-platform/4.12/nodes/clusters/nodes-cluster-limit-ranges.html
+## Resource quota: https://docs.openshift.com/container-platform/4.12/applications/quotas/quotas-setting-per-project.html
+## Network policy: https://docs.openshift.com/container-platform/4.12/networking/network_policy/about-network-policy.html
+## Grant users access to project: https://computingforgeeks.com/grant-user-access-to-project-in-openshift/
+##
+######################################################################################################################################
+projects:
+  xx-project:
+    metaData:
+      displayName: "XX project"
+      requester: hhue
+    roleSettings:
+      enabled: true
+      roleBindings:
+        - role: "admin"
+          identities:
+            - name: "ocpadmins"
+              type: "Group"
+            - name: "ocpadmin"
+              type: "User"
+        - role: "edit"
+          identities:
+            - name: "developer"
+              type: "User"
+    resources:
+      enabled: true
+      quota:
+        hard:
+          pods: "3"
+          requests.cpu: "1"
+          requests.memory: "7Gi"
+          limits.cpu: "3"
+          limits.memory: "10Gi"
+          persistentvolumeclaims: "7"
+          requests.storage: "70Gi"
+    limitRanges:
+      enabled: true
+      limits:
+        - type: "Container"
+          max:
+            cpu: "2"
+            memory: "1Gi"
+          min:
+            cpu: "100m"
+            memory: "4Mi"
+          defaultRequest:
+            cpu: "100m"
+            memory: "100Mi"
