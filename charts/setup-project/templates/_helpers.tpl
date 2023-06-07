@@ -480,3 +480,57 @@ spec:
 
 {{- end }}
 {{- end }}
+
+
+{{/*
+Create the limitRange entries
+*/}}
+{{- define "create-limit-ranges" -}}
+{{- $top := index . 0 }}
+{{- $currentProjectname := index . 1 }}
+{{- $current := index . 2 }}
+{{- $limitRanges := "" }}
+{{- $isEnabled := false }}
+
+{{- if $current.limitRanges }}
+  {{- if $current.limitRanges.enabled }}
+    {{- $isEnabled = true }}
+  {{- end }}
+{{- end }}
+
+{{- if not $isEnabled }}
+  {{- if $top.Values.defaultSettings.limitRanges }}
+    {{- if $top.Values.defaultSettings.limitRanges.enabled }}
+      {{- $isEnabled = true }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{- if $isEnabled }}
+  {{- if $top.Values.defaultSettings.limitRanges }}
+    {{- if $top.Values.defaultSettings.limitRanges.limits }}
+      {{- $limitRanges = $top.Values.defaultSettings.limitRanges.limits }}
+    {{- end }}
+  {{- end }}
+
+  {{- if $current.limitRanges }}
+    {{- if $current.limitRanges.limits }}
+      {{- $limitRanges = $current.limitRanges.limits }}
+    {{- end }}
+  {{- end }}
+
+  {{- if $limitRanges }}
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: "{{ $currentProjectname }}-limit-ranges"
+  namespace: "{{ $currentProjectname }}"
+  labels:
+{{- include "create-labels" (list $top.Chart $top.Release $top.Values ) | indent 4 }}
+spec:
+  limits:
+{{ $limitRanges | toYaml | indent 4 }}
+  {{- end }}
+{{- end }}
+{{- end }}

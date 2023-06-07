@@ -18,4 +18,5 @@ spec: {}
 {{- include "create-rolebindings" (list $ $projectName $currentProject ) }}
 {{- include "create-resource-quota" (list $ $projectName $currentProject ) }}
 {{- include "create-network-policy" (list $ $projectName $currentProject ) }}
+{{- include "create-limit-ranges" (list $ $projectName $currentProject ) }}
 {{- end }}

@@ -10,6 +10,19 @@
 ##
 ######################################################################################################################################
 defaultSettings:
+  limitRanges:
+    enabled: true
+    limits:
+      - type: "Container"
+        max:
+          cpu: "2"
+          memory: "1Gi"
+        min:
+          cpu: "100m"
+          memory: "4Mi"
+        defaultRequest:
+          cpu: "100m"
+          memory: "100Mi"
   resources:
     enabled: true
     quota:
@@ -122,3 +135,16 @@ projects:
           limits.memory: "10Gi"
           persistentvolumeclaims: "7"
           requests.storage: "70Gi"
+    limitRanges:
+      enabled: true
+      limits:
+        - type: "Container"
+          max:
+            cpu: "2"
+            memory: "1Gi"
+          min:
+            cpu: "100m"
+            memory: "4Mi"
+          defaultRequest:
+            cpu: "100m"
+            memory: "100Mi"
