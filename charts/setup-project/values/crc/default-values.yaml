@@ -70,8 +70,8 @@ defaultSettings:
         toNamespaces:
           - namespace: kube-apiserver-operator
             labels:
-              - name: "kubernetes.io/metadata.name"
-                value: "openshift-kube-apiserver-operator"
+              - labelName: "kubernetes.io/metadata.name"
+                labelValue: "openshift-kube-apiserver-operator"
             podSelectors:
               - labelName: "app"
                 labelValue: "kube-apiserver-operator"
