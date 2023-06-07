@@ -51,3 +51,15 @@ projects:
           defaultRequest:
             cpu: "100m"
             memory: "100Mi"
+    networkSettings:
+      enabled: true
+      networkPolicies:
+        toCidrs:
+          - cidrName: "ldap"
+            cidr:
+              - 192.168.57.1/32
+            ports:
+              - protocol: TCP
+                port: 636
+              - protocol: TCP
+                port: 389
