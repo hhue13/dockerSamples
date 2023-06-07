@@ -381,7 +381,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-from-same-namespace
+  name: allow-from-to-same-namespace
   namespace: "{{ $currentProjectname }}"
   labels:
 {{- include "create-labels" (list $top.Chart $top.Release $top.Values ) | indent 4 }}
@@ -410,6 +410,41 @@ spec:
   podSelector: {}
   policyTypes:
     - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-router
+  namespace: "{{ $currentProjectname }}"
+  labels:
+{{- include "create-labels" (list $top.Chart $top.Release $top.Values ) | indent 4 }}
+spec:
+  ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            policy-group.network.openshift.io/ingress: ""
+  podSelector: {}
+  policyTypes:
+    - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-hostnetwork
+  namespace: "{{ $currentProjectname }}"
+  labels:
+{{- include "create-labels" (list $top.Chart $top.Release $top.Values ) | indent 4 }}
+spec:
+  ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            policy-group.network.openshift.io/host-network: ""
+  podSelector: {}
+  policyTypes:
+    - Ingress
+
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -460,6 +495,12 @@ spec:
       - namespaceSelector:
           matchLabels:
             kubernetes.io/metadata.name: openshift-logging
+  egress:
+    - to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: openshift-logging
+
   podSelector: {}
   policyTypes:
     - Ingress
