@@ -203,14 +203,14 @@ spec:
     - Ingress
   ingress:
     - from:
-        - namespaceSelector:
-            matchExpressions:
-            {{- range .labels }}
-              - key: {{ .labelName }}
-                operator: In
-                values:
-                  - {{ .labelValue }}
-            {{- end }}
+      - namespaceSelector:
+          matchExpressions:
+          {{- range .labels }}
+            - key: {{ .labelName }}
+              operator: In
+              values:
+                - {{ .labelValue }}
+          {{- end }}
       {{- end }}
     {{- end }}
 {{/*
@@ -243,14 +243,14 @@ spec:
     - Ingress
   ingress:
     - from:
-        - podSelector:
-            matchExpressions:
-            {{- range .labels }}
-              - key: {{ .labelName }}
-                operator: In
-                values:
-                  - {{ .labelValue }}
-            {{- end }}
+      - podSelector:
+          matchExpressions:
+          {{- range .labels }}
+            - key: {{ .labelName }}
+              operator: In
+              values:
+                - {{ .labelValue }}
+          {{- end }}
       {{- end }}
     {{- end }}
   {{- end }}
@@ -285,14 +285,14 @@ spec:
     - Egress
   egress:
     - to:
-        - namespaceSelector:
-            matchExpressions:
-            {{- range .labels }}
-              - key: {{ .labelName }}
-                operator: In
-                values:
-                  - {{ .labelValue }}
-            {{- end }}
+      - namespaceSelector:
+          matchExpressions:
+          {{- range .labels }}
+            - key: {{ .labelName }}
+              operator: In
+              values:
+                - {{ .labelValue }}
+          {{- end }}
       {{- end }}
     {{- end }}
 {{/*
@@ -325,14 +325,14 @@ spec:
     - Egress
   egress:
     - to:
-        - podSelector:
-            matchExpressions:
-            {{- range .labels }}
-              - key: {{ .labelName }}
-                operator: In
-                values:
-                  - {{ .labelValue }}
-            {{- end }}
+      - podSelector:
+          matchExpressions:
+          {{- range .labels }}
+            - key: {{ .labelName }}
+              operator: In
+              values:
+                - {{ .labelValue }}
+          {{- end }}
       {{- end }}
     {{- end }}
 {{/*
@@ -389,10 +389,10 @@ spec:
   podSelector: {}
   ingress:
     - from:
-        - podSelector: {}
+      - podSelector: {}
   egress:
     - to:
-        - podSelector: {}
+      - podSelector: {}
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -404,9 +404,9 @@ metadata:
 spec:
   ingress:
     - from:
-        - namespaceSelector:
-            matchLabels:
-              network.openshift.io/policy-group: ingress
+      - namespaceSelector:
+          matchLabels:
+            network.openshift.io/policy-group: ingress
   podSelector: {}
   policyTypes:
     - Ingress
@@ -421,12 +421,12 @@ metadata:
 spec:
   ingress:
     - from:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: openshift-kube-apiserver-operator
-          podSelector:
-            matchLabels:
-              app: kube-apiserver-operator
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: openshift-kube-apiserver-operator
+        podSelector:
+          matchLabels:
+            app: kube-apiserver-operator
   policyTypes:
     - Ingress
 ---
@@ -440,9 +440,9 @@ metadata:
 spec:
   ingress:
     - from:
-        - namespaceSelector:
-            matchLabels:
-              network.openshift.io/policy-group: monitoring
+      - namespaceSelector:
+          matchLabels:
+            network.openshift.io/policy-group: monitoring
   podSelector: {}
   policyTypes:
     - Ingress
@@ -457,9 +457,9 @@ metadata:
 spec:
   ingress:
     - from:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: openshift-logging
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: openshift-logging
   podSelector: {}
   policyTypes:
     - Ingress
@@ -477,7 +477,6 @@ spec:
   policyTypes:
     - Ingress
     - Egress
-
 {{- end }}
 {{- end }}
 
