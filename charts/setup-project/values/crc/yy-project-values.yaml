@@ -1,0 +1,65 @@
+######################################################################################################################################
+##
+## Values file to configure projects
+##
+## Documentation references:
+## LimitRanges: https://docs.openshift.com/container-platform/4.12/nodes/clusters/nodes-cluster-limit-ranges.html
+## Resource quota: https://docs.openshift.com/container-platform/4.12/applications/quotas/quotas-setting-per-project.html
+## Network policy: https://docs.openshift.com/container-platform/4.12/networking/network_policy/about-network-policy.html
+## Grant users access to project: https://computingforgeeks.com/grant-user-access-to-project-in-openshift/
+##
+######################################################################################################################################
+projects:
+  yy-project:
+    metaData:
+      requester: test-requester
+    roleSettings:
+      enabled: true
+      roleBindings:
+        - role: "admin"
+          identities:
+            - name: "ocpadmins"
+              type: "Group"
+            - name: "ocpadmin"
+              type: "User"
+        - role: "edit"
+          identities:
+            - name: "developer"
+              type: "User"
+    resources:
+      enabled: true
+      quota:
+        hard:
+          pods: "3"
+          requests.cpu: "1"
+          requests.memory: "7Gi"
+          limits.cpu: "3"
+          limits.memory: "10Gi"
+          persistentvolumeclaims: "7"
+          requests.storage: "70Gi"
+    limitRanges:
+      enabled: true
+      limits:
+        - type: "Container"
+          max:
+            cpu: "4"
+            memory: "4Gi"
+          min:
+            cpu: "10m"
+            memory: "10Mi"
+          defaultRequest:
+            cpu: "10m"
+            memory: "10Mi"
+    networkSettings:
+      enabled: true
+      networkPolicies:
+        egress:
+          toCidrs:
+            - cidrName: "ldap"
+              cidr:
+                - 192.168.57.1/32
+              ports:
+                - protocol: TCP
+                  port: 636
+                - protocol: TCP
+                  port: 389

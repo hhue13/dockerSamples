@@ -1,0 +1,23 @@
+{{- $thisChart := .Chart }}
+{{- $thisRelease := .Release }}
+{{- $thisValues := .Values }}
+{{- range $projectName, $currentProject := .Values.projects }}
+{{- $requestor :=  required "For every project \"metaData.requester\" is required ..." $currentProject.metaData.requester }}
+---
+apiVersion: project.openshift.io/v1
+kind: Project
+metadata:
+  labels:
+{{- include "create-labels" (list $thisChart $thisRelease $thisValues ) | indent 4 }}
+  annotations:
+    openshift.io/description: "{{ $currentProject.metaData.description | default "" }}"
+    openshift.io/display-name: "{{ $currentProject.metaData.displayName | default "" }}"
+    openshift.io/requester: "{{ $currentProject.metaData.requester }}"
+  name: "{{ $projectName }}"
+spec: {}
+
+{{- include "create-rolebindings" (list $ $projectName $currentProject ) }}
+{{- include "create-resource-quota" (list $ $projectName $currentProject ) }}
+{{- include "create-network-policy" (list $ $projectName $currentProject ) }}
+{{- include "create-limit-ranges" (list $ $projectName $currentProject ) }}
+{{- end }}
