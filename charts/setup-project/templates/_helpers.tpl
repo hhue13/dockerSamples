@@ -49,8 +49,10 @@ we check for default role bindings
   {{- end }}
 
   {{- if $current.roleSettings }}
-    {{- if $current.roleSettings.roleBindings }}
-      {{- $roleBindings = $current.roleSettings.roleBindings }}
+    {{- if $current.roleSettings.enabled }}
+      {{- if $current.roleSettings.roleBindings }}
+        {{- $roleBindings = $current.roleSettings.roleBindings }}
+      {{- end }}
     {{- end }}
   {{- end }}
 
@@ -116,8 +118,10 @@ Create the resource quota entries
   {{- end }}
 
   {{- if $current.resources }}
-    {{- if $current.resources.quota }}
-      {{- $resourceQuota = $current.resources.quota }}
+    {{- if $current.resources.enabled }}
+      {{- if $current.resources.quota }}
+        {{- $resourceQuota = $current.resources.quota }}
+      {{- end }}
     {{- end }}
   {{- end }}
 
@@ -173,8 +177,10 @@ via the defaults or the project definition
   {{- end }}
 
   {{- if $current.networkSettings }}
-    {{- if $current.networkSettings.networkPolicies }}
-      {{- $networkPolicies = $current.networkSettings.networkPolicies }}
+    {{- if $current.networkSettings.enabled }}
+      {{- if $current.networkSettings.networkPolicies }}
+        {{- $networkPolicies = $current.networkSettings.networkPolicies }}
+      {{- end }}
     {{- end }}
   {{- end }}
 
@@ -561,8 +567,10 @@ Create the limitRange entries
   {{- end }}
 
   {{- if $current.limitRanges }}
-    {{- if $current.limitRanges.limits }}
-      {{- $limitRanges = $current.limitRanges.limits }}
+    {{- if $current.limitRanges.enabled }}
+      {{- if $current.limitRanges.limits }}
+        {{- $limitRanges = $current.limitRanges.limits }}
+      {{- end }}
     {{- end }}
   {{- end }}
 
