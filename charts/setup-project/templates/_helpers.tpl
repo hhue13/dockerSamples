@@ -520,6 +520,24 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
+  name: "{{ $currentProjectname }}-allow-to-openshift-dns"
+  namespace: "{{ $currentProjectname }}"
+  labels:
+{{- include "create-labels" (list $top.Chart $top.Release $top.Values ) | indent 4 }}
+spec:
+  egress:
+    - to:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: openshift-dns
+
+  podSelector: {}
+  policyTypes:
+    - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
   name: "{{ $currentProjectname }}-deny-all-by-default"
   namespace: "{{ $currentProjectname }}"
   labels:
