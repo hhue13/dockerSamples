@@ -28,7 +28,7 @@ projects:
       requester: hhue
 ``` 
 **Note**: _metaData.requester_ is the only required attribute from the _metdaData_ stanza
-
+> **Note**: If using multiple values files containing the same object (list, dictionary) the **LISTS** are **replaced** and **DICTIONARIES** are **merged** to one dictionary.
 ### Supported 'kind:' objects
 The Helm chart supports certain OpenShift **kind:** objects only. Please see the section _Template stanza for supported values_ of the provided [default-values.yaml](setup-project/values/crc/default-values.yaml) file for a list of supported objects. Each of the objects can be defined in the default values file or at the respective level on a per project basis.
 
