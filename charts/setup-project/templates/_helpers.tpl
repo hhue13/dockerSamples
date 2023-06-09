@@ -386,6 +386,9 @@ spec:
       {{- range .ports}}
         - protocol: {{ .protocol}}
           port: {{ .port }}
+          {{- if .endPort }}
+          endPort: {{ .endPort }}
+          {{- end }}
       {{- end }}
       {{- end }}
     {{- end }}
