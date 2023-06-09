@@ -161,6 +161,3 @@ defaultSettings:
                 port: 636
               - protocol: TCP
                 port: 389
-            podSelectors:
-              - labelName: "app"
-                labelValue: "kube-apiserver-operator"
