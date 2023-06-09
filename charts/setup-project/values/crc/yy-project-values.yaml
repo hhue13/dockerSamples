@@ -61,5 +61,6 @@ projects:
               ports:
                 - protocol: TCP
                   port: 636
+                  endPort: 1000
                 - protocol: TCP
                   port: 389
