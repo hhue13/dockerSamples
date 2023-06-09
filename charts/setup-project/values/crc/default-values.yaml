@@ -138,42 +138,20 @@ defaultSettings:
           - name: "developer"
             type: "User"
   networkSettings:
-    enabled: false
+    enabled: true
     networkPolicies:
       ingress:
         fromNamespaces:
-          - namespace: kube-apiserver-operator
+          - namespace: default
             labels:
               - labelName: "kubernetes.io/metadata.name"
-                labelValue: "openshift-kube-apiserver-operator"
-            podSelectors:
-              - labelName: "app"
-                labelValue: "kube-apiserver-operator"
-        fromPods:
-          - podName: test-app
-            labels:
-              - labelName: "app"
-                labelValue: "test"
-            podSelectors:
-              - labelName: "app"
-                labelValue: "kube-apiserver-operator"
+                labelValue: "default"
       egress:
         toNamespaces:
-          - namespace: kube-apiserver-operator
+          - namespace: default
             labels:
               - labelName: "kubernetes.io/metadata.name"
-                labelValue: "openshift-kube-apiserver-operator"
-            podSelectors:
-              - labelName: "app"
-                labelValue: "kube-apiserver-operator"
-        toPods:
-          - podName: test-app
-            labels:
-              - labelName: "app"
-                labelValue: "test"
-            podSelectors:
-              - labelName: "app"
-                labelValue: "kube-apiserver-operator"
+                labelValue: "default"
         toCidrs:
           - cidrName: "ldap"
             cidr:
