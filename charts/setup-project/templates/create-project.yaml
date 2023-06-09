@@ -4,6 +4,20 @@
 {{- range $projectName, $currentProject := .Values.projects }}
 {{- $requestor :=  required "For every project \"metaData.requester\" is required ..." $currentProject.metaData.requester }}
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    openshift.io/description: "{{ $currentProject.metaData.description | default "" }}"
+    openshift.io/display-name: "{{ $currentProject.metaData.displayName | default "" }}"
+    openshift.io/requester: "{{ $currentProject.metaData.requester }}"
+  labels:
+{{- include "create-labels" (list $thisChart $thisRelease $thisValues ) | indent 4 }}
+  name: "{{ $projectName }}"
+spec:
+  finalizers:
+  - kubernetes
+---
 apiVersion: project.openshift.io/v1
 kind: Project
 metadata:
