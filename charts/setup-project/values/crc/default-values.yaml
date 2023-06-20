@@ -102,7 +102,7 @@
 ######################################################################################################################################
 defaultSettings:
   limitRanges:
-    enabled: true
+    enabled: false
     limits:
       - type: "Container"
         max:
@@ -115,7 +115,7 @@ defaultSettings:
           cpu: "100m"
           memory: "100Mi"
   resources:
-    enabled: true
+    enabled: false
     quota:
       hard:
         pods: "5"
@@ -125,7 +125,7 @@ defaultSettings:
         limits.memory: "5Gi"
         requests.storage: "50Gi"
   roleSettings:
-    enabled: true
+    enabled: false
     roleBindings:
       - role: "admin"
         identities:
@@ -138,7 +138,7 @@ defaultSettings:
           - name: "developer"
             type: "User"
   networkSettings:
-    enabled: true
+    enabled: false
     networkPolicies:
       ingress:
         fromNamespaces:
