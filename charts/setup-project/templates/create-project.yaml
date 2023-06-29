@@ -8,9 +8,7 @@ apiVersion: v1
 kind: Namespace
 metadata:
   annotations:
-    openshift.io/description: "{{ $currentProject.metaData.description | default "" }}"
-    openshift.io/display-name: "{{ $currentProject.metaData.displayName | default "" }}"
-    openshift.io/requester: "{{ $currentProject.metaData.requester }}"
+{{- include "create-namespace-annotations" (list $currentProject ) | indent 4 }}
   labels:
 {{- include "create-labels" (list $thisChart $thisRelease $thisValues ) | indent 4 }}
   name: "{{ $projectName }}"
