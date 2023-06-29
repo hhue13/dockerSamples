@@ -13,6 +13,21 @@ app.kubernetes.io/managed-by: {{ $thisRelease.Service }}
 
 {{- end }}
 
+{{/*
+Create the annotations for the namespace
+*/}}
+{{- define "create-namespace-annotations" -}}
+{{- $thisProject := index . 0 }}
+openshift.io/description: "{{ $thisProject.metaData.description | default "" }}"
+openshift.io/display-name: "{{ $thisProject.metaData.displayName | default "" }}"
+openshift.io/requester: "{{ $thisProject.metaData.requester }}"
+k8s.ovn.org/acl-logging: |-
+  {
+    "deny": "info",
+    "allow": "info"
+  }
+{{- end }}
+
 
 {{/*
 Create the role bindings for the project. If we don't have any project rolebindings
