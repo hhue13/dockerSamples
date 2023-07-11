@@ -17,3 +17,24 @@ projects:
       description: |
         This project is setup using the defaults only
         and has no project specific settings
+    roleSettings:
+      enabled: true
+      roleBindings:
+        - role: "admin"
+          identities:
+            - name: "ocpadmins"
+              type: "Group"
+            - name: "ocpadmin"
+              type: "User"
+        - role: "edit"
+          identities:
+            - name: "developer"
+              type: "User"
+        - role: "monitoring-rules-view"
+          identities:
+            - name: "developer"
+              type: "User"
+        - role: "monitoring-rules-edit"
+          identities:
+            - name: "ocpadmin"
+              type: "User"
