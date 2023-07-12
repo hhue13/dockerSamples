@@ -46,6 +46,9 @@
 #####             type: "Group"
 #####           - name: "ocpadmin"
 #####             type: "User"
+#####           - name: "hhuesa"
+#####             type: "ServiceAccount"
+#####             namespace: "default"
 #####       - role: "edit"
 #####         identities:
 #####           - name: "developer"
@@ -133,6 +136,9 @@ defaultSettings:
             type: "Group"
           - name: "ocpadmin"
             type: "User"
+          - name: "hhuesa"
+            type: "ServiceAccount"
+            namespace: "default"
       - role: "edit"
         identities:
           - name: "developer"

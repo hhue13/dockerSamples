@@ -22,6 +22,9 @@ projects:
               type: "Group"
             - name: "ocpadmin"
               type: "User"
+            - name: "hhuesa"
+              type: "ServiceAccount"
+              namespace: "default"
         - role: "edit"
           identities:
             - name: "developer"
