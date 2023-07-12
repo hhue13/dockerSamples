@@ -90,6 +90,9 @@ subjects:
   - apiGroup: rbac.authorization.k8s.io
     kind: "{{ .type }}"
     name: "{{ .name }}"
+    {{- if .namespace }}
+    namespace: "{{ .namespace }}"
+    {{- end -}}
   {{- end }}
 
     {{- end }}
