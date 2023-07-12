@@ -87,8 +87,7 @@ roleRef:
   name: "{{ .role }}"
 subjects:
   {{- range .identities }}
-  - apiGroup: rbac.authorization.k8s.io
-    kind: "{{ .type }}"
+  - kind: "{{ .type }}"
     name: "{{ .name }}"
     {{- if .namespace }}
     namespace: "{{ .namespace }}"
