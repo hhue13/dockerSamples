@@ -1,0 +1,18 @@
+######################################################################################################################################
+##
+## Values file to configure projects
+##
+## Documentation references:
+## LimitRanges: https://docs.openshift.com/container-platform/4.12/nodes/clusters/nodes-cluster-limit-ranges.html
+## Resource quota: https://docs.openshift.com/container-platform/4.12/applications/quotas/quotas-setting-per-project.html
+## Network policy: https://docs.openshift.com/container-platform/4.12/networking/network_policy/about-network-policy.html
+## Grant users access to project: https://computingforgeeks.com/grant-user-access-to-project-in-openshift/
+##
+######################################################################################################################################
+projects:
+  csi-driver-smb:
+    metaData:
+      requester: hhue
+      displayName: "CSI driver for SMB"
+      description: |
+        Helm chart deployment for CSI driver to connect SMB storage based on: https://github.com/kubernetes-csi/csi-driver-smb
