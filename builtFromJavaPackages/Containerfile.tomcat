@@ -34,6 +34,7 @@ RUN     microdnf --setopt=install_weak_deps=0 -y install gzip \
         xmlstarlet ed -L -d '/Context/Valve[contains(@className, "org.apache.catalina.valves.RemoteAddrValve")]' /var/lib/tomcat/webapps/host-manager/META-INF/context.xml
 
 COPY    conf/tomcat-users.xml /etc/tomcat/tomcat-users.xml
+COPY    bin/jolokia-war-1.7.2.war /var/lib/tomcat/webapps/jolokia.war
 
 USER    ${IMAGE_USER}
 
