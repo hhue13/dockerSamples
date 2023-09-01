@@ -42,7 +42,7 @@ ENV     TOMCAT_CFG_LOADED="1"
 ENV     TOMCATS_BASE="/var/lib/tomcats/"
 ENV     CATALINA_HOME="/usr/share/tomcat"
 ENV     CATALINA_TMPDIR="/var/cache/tomcat/temp"
-ENV     JAVA_OPTS="-Djava.awt.headless=true"
+ENV     JAVA_OPTS="-Djava.awt.headless=true -XX:+UseContainerSupport -XshowSettings:system"
 ENV     SECURITY_MANAGER="false"
 
 EXPOSE 8080
