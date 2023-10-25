@@ -34,6 +34,7 @@ RUN     microdnf --setopt=install_weak_deps=0 -y install gzip \
         xmlstarlet ed -L -d '/Context/Valve[contains(@className, "org.apache.catalina.valves.RemoteAddrValve")]' /var/lib/tomcat/webapps/host-manager/META-INF/context.xml
 
 COPY    conf/tomcat-users.xml /etc/tomcat/tomcat-users.xml
+COPY    bin/jolokia-war-1.7.2.war /var/lib/tomcat/webapps/jolokia.war
 
 USER    ${IMAGE_USER}
 
@@ -41,7 +42,7 @@ ENV     TOMCAT_CFG_LOADED="1"
 ENV     TOMCATS_BASE="/var/lib/tomcats/"
 ENV     CATALINA_HOME="/usr/share/tomcat"
 ENV     CATALINA_TMPDIR="/var/cache/tomcat/temp"
-ENV     JAVA_OPTS="-Djava.awt.headless=true"
+ENV     JAVA_OPTS="-Djava.awt.headless=true -XX:+UseContainerSupport -XshowSettings:system"
 ENV     SECURITY_MANAGER="false"
 
 EXPOSE 8080

@@ -1,0 +1,46 @@
+{{- $imageRegistry := "default" }}
+{{- $thisChart := .Chart }}
+{{- $thisRelease := .Release }}
+{{- $thisValues := .Values }}
+
+{{- range .Values.deployments }}
+
+{{- if .autoscaling }}
+{{- if .autoscaling.enabled }}
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .name }}
+  labels:
+    {{- include "tpl.labels" (list $ $thisChart $thisRelease .name) | nindent 4 }}
+    {{- include "tpl.selectorLabels" (list $ $thisChart $thisRelease .name) | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .name }}
+  minReplicas: {{ .autoscaling.minReplicas }}
+  maxReplicas: {{ .autoscaling.maxReplicas }}
+  metrics:
+    {{- if .autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .autoscaling.targetCPUUtilizationPercentage }}
+    {{- end }}
+    {{- if .autoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .autoscaling.targetMemoryUtilizationPercentage }}
+    {{- end }}
+{{- end }}
+
+{{- end -}}
+{{- end -}}
+

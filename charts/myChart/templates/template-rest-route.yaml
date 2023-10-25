@@ -1,0 +1,21 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app: template-rest
+  name: template-rest
+  namespace: tpl-d
+spec:
+  host: "{{ .Values.hostname }}"
+  path: /rest
+  port:
+    targetPort: 8080-tcp
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: template-rest
+    weight: 100
+  wildcardPolicy: None
+

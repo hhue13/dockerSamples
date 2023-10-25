@@ -1,0 +1,112 @@
+{{- $imageRegistry := "default" }}
+{{- $thisChart := .Chart }}
+{{- $thisRelease := .Release }}
+{{- $thisValues := .Values }}
+
+{{- range .Values.deployments }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .name }}
+  labels:
+    {{- include "tpl.labels" (list $ $thisChart $thisRelease .name) | nindent 4 }}
+    {{- include "tpl.selectorLabels" (list $ $thisChart $thisRelease .name) | nindent 4 }}
+spec:
+  {{- if not .autoscaling }}
+  replicas: {{ .replicaCount }}
+  {{- else }}
+  {{- if not .autoscaling.enabled }}
+  replicas: {{ .replicaCount }}
+  {{- end }}
+  {{- end }}
+  selector:
+    matchLabels: 
+      {{- include "tpl.selectorLabels" (list $ $thisChart $thisRelease .name) | nindent 6 }}
+  template:
+    metadata:
+      {{- with .podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "tpl.selectorLabels" (list $ $thisChart $thisRelease .name) | nindent 8 }}
+    spec:
+      {{- with .imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ .serviceAccountName | default "default" }}
+      {{- if .podSecurityContext }}
+      securityContext:
+        {{- toYaml .podSecurityContext | nindent 8 }}
+      {{- end }}
+      containers:
+        {{- range .containers }}
+        - name: {{ .name }}
+          {{- with .securityContext }}
+          securityContext:
+            {{- toYaml .securityContext | nindent 12 }}
+          {{- end }}
+          {{- if .image.registry }}
+            {{- $imageRegistry = .image.registry }}
+          {{- else }}
+            {{- $imageRegistry = $.imageRegistry }}
+          {{- end }}
+          image: "{{ $imageRegistry }}/{{ .image.name }}:{{ .image.tag }}"
+          imagePullPolicy: {{ .image.pullPolicy | default "IfNotPresent" }}
+          {{- if .livenessProbe }}
+          {{- if .livenessProbe.enabled }}
+          livenessProbe:
+            {{- include "tpl.probes" (list .livenessProbe .httpPort .httpsPort) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          ports:
+            {{- if .httpPort }}
+            - containerPort: {{ .httpPort }}
+              protocol: TCP
+            {{- end }}
+            {{- if .httpsPort }}
+            - containerPort: {{ .httpsPort }}
+              protocol: TCP
+            {{- end }}
+          {{- if .readinessProbe }}
+          {{- if .readinessProbe.enabled }}
+          readinessProbe:
+            {{- include "tpl.probes" (list .readinessProbe .httpPort .httpsPort) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          {{- if .startupProbe }}
+          {{- if .startupProbe.enabled }}
+          startupProbe:
+            {{- include "tpl.probes" (list .startupProbe .httpPort .httpsPort) | nindent 12 }}
+          {{- end }}
+          {{- end }}
+
+          {{- if .resources }}
+          resources:
+            {{- toYaml .resources | nindent 12 }}
+          {{- end }}
+          {{- if .volumeMounts }}
+          volumeMounts:
+            {{- toYaml .volumeMounts | nindent 12 }}
+          {{- end }}
+        {{- end }}
+      {{- with .nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .volumes }}
+      volumes:
+        {{- toYaml .volumes | nindent 8 }}
+      {{- end }}
+{{- end }}
+

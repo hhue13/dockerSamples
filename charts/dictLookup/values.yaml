@@ -1,0 +1,20 @@
+app:
+  - name: app01
+    deploymentModel: 3stage
+  - name: app02
+    deploymentModel: 5stage
+
+deploymentmodels:
+  3stage:
+    stages:
+      - stage01
+      - stage02
+      - stage03
+  5stage:
+    stages:
+    - stage01
+    - stage02
+    - stage03
+    - stage04
+    - stage05
+
