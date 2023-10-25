@@ -1,0 +1,33 @@
+# Default values for myChart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+hostname: tpl-d.intern.statistik.at 
+
+resources:
+  cpu:
+    requests: 500m 
+    limits: 2 
+  memory:
+    requests: 500Mi
+    limits: 2Gi
+
+probes:
+  httpHeaders:
+    - name: x-version
+      value: "1.9"
+    - name: x-authenticate-userid
+      value: openshift@statistik.gv.at
+    - name: x-authorize-roles
+      value: OpenShift
+
+acceptedHosts:
+  - name: "Testhost 1"
+    url: http://test1.host.at/
+  - name: "Testhost 2"
+    url: http://test2.host.at/
+
+##### {{- range .Values.acceptedHosts }}
+##### {{- $myVar := printf "%s: %s" .name .url }}
+##### {{- $myVar | nindent 2 }}
+##### {{- end }}

@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: template-rest
+  name: template-rest
+  namespace: tpl-d
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: template-rest
+      deployment: template-rest
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        openshift.io/generated-by: OpenShiftNewApp
+      creationTimestamp: null
+      labels:
+        app: template-rest
+        deployment: template-rest
+    spec:
+      containers:
+      - env:
+        - name: CATALINA_OPTS
+          valueFrom:
+            secretKeyRef:
+              key: CATALINA_OPTS
+              name: catalina-opts
+        image: arti.statistik.local:5007/template-rest@sha256:34e7a155f0477f32980ce9c977589914cec82a69edd7ea4ed7530625a8c046c2
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            httpHeaders:
+            - name: x-version
+              value: "1.9"
+            - name: x-authenticate-userid
+              value: openshift@statistik.gv.at
+            - name: x-authorize-roles
+              value: OpenShift
+            path: /rest/health
+            port: 8080
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: template-rest
+        ports:
+        - containerPort: 8443
+          protocol: TCP
+        - containerPort: 8080
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+          {{- if .Values.probes }}
+          {{- if .Values.probes.httpHeaders }}
+          {{- toYaml .Values.probes.httpHeaders | nindent 10 }}
+          {{- end }}
+          {{- end }}
+            path: /rest/health
+            port: 8080
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: "{{ .Values.resources.cpu.limits }}"
+            memory: "{{ .Values.resources.memory.limits }}"
+          requests:
+            cpu: "{{ .Values.resources.cpu.requests }}"
+            memory: "{{ .Values.resources.memory.requests }}"
+        startupProbe:
+          failureThreshold: 3
+          httpGet:
+          {{- if .Values.probes }}
+          {{- if .Values.probes.httpHeaders }}
+            httpHeaders:
+          {{- range $key, $val := .Values.probes.httpHeaders }}
+            - name: {{ $val.name }}
+              value: {{ $val.value }}
+          {{- end }}
+          {{- end }}
+          {{- end }}
+            path: /rest/health
+            port: 8080
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

@@ -1,0 +1,134 @@
+imageRegistry: epyc.2i.at:18444
+
+deployments:
+  - name: template-rest
+    replicaCount: 1
+    podAnnotations:
+      annotation-1: one 
+      annotation-2: two
+    autoscaling:
+      enabled: true
+      minReplicas: 1
+      maxReplicas: 100
+      targetCPUUtilizationPercentage: 80
+      # targetMemoryUtilizationPercentage: 80
+    containers:
+      - name: template-rest
+        httpPort: 8080
+        httpsPort: 8443
+        image:
+          registry: epyc.2i.at:18444
+          name: "ubi8-minimal"
+          tag: "8.7"
+          pullPolicy: IfNotPresent
+        livenessProbe:
+          enabled: true
+          method: "httpGet"
+          httpHeaders:
+            - name: x-version
+              value: "1.9"
+            - name: x-authenticate-userid
+              value: openshift@statistik.gv.at
+            - name: x-authorize-roles
+              value: OpenShift
+          path: /rest/health
+          scheme: HTTP
+          failureThreshold: 3
+          timeoutSeconds: 1
+          periodSeconds: 10
+          successThreshold: 1
+        readinessProbe:
+          enabled: true
+          method: "httpGet"
+          httpHeaders:
+            - name: x-version
+              value: "1.9"
+            - name: x-authenticate-userid
+              value: openshift@statistik.gv.at
+            - name: x-authorize-roles
+              value: OpenShift
+          path: /rest/health
+          scheme: HTTP
+          failureThreshold: 3
+          timeoutSeconds: 1
+          periodSeconds: 10
+          successThreshold: 1
+        resources:
+          limits:
+            cpu: "2"
+            memory: 2Gi
+          requests:
+            cpu: 500m
+            memory: 500Mi
+        # securityContext: {}
+          # capabilities:
+          #   drop:
+          #   - ALL
+          # readOnlyRootFilesystem: true
+          # runAsNonRoot: true
+          # runAsUser: 1000
+        startupProbe:
+          enabled: true
+          method: "httpGet"
+          httpHeaders:
+            - name: x-version
+              value: "1.9"
+            - name: x-authenticate-userid
+              value: openshift@statistik.gv.at
+            - name: x-authorize-roles
+              value: OpenShift
+          path: /rest/health
+          scheme: HTTP
+          failureThreshold: 3
+          timeoutSeconds: 1
+          periodSeconds: 10
+          successThreshold: 1
+        restartPolicy: Always
+        rolloutStrategy: RollingUpdate
+        terminationGracePeriodSeconds: 30
+    routes:
+  - name: template-workspace-material
+    replicaCount: 1
+    containers:
+      - name: template-workspace-material
+        httpPort: 8080
+#        httpsPort: 8443
+        image:
+          name: "ubi8-minimal"
+          tag: "8.7"
+        livenessProbe:
+          enabled: true
+          method: "httpGet"
+          path: /
+          scheme: HTTP
+        readinessProbe:
+          enabled: true
+          method: "httpGet"
+          path: /
+          scheme: HTTP
+        resources:
+          limits:
+            cpu: "2"
+            memory: 2Gi
+          requests:
+            cpu: 500m
+            memory: 500Mi
+        startupProbe:
+          enabled: true
+          method: "httpGet"
+          path: /
+          scheme: HTTP
+        rolloutStrategy: Recreate
+        volumeMounts:
+        - mountPath: /opt/tomcat/webapps/ROOT/assets/settings.json
+          name: volume-rczqn
+          subPath: settings.json
+    volumes:
+    - configMap:
+        defaultMode: 420
+        name: settings-json-template-workspace-material
+      name: volume-rczqn
+    service:
+
+#### =====================================================================
+#### =====================================================================

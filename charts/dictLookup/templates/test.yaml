@@ -1,0 +1,7 @@
+{{- range .Values.app }}
+    {{- printf "Current app name: %s\n" .name }}
+    {{ $stageList := get $.Values.deploymentmodels  .deploymentModel }}
+    {{- range $stageList.stages }}
+        {{- printf "Current stage : %s\n" . }}
+    {{- end }}
+{{- end }}
