@@ -262,11 +262,11 @@ deploymentmodels:
       - stage03
   5stage:
     stages:
-    - stage01
-    - stage02
-    - stage03
-    - stage04
-    - stage05
+      - stage01
+      - stage02
+      - stage03
+      - stage04
+      - stage05
 ```
 
 Code im Template:
@@ -294,7 +294,7 @@ Darüber hinaus gibt es auch Pipeline Funktionen
 - `{{ .Values.var | lower }}`: Kovertiert den Wert der Variablen *var* in Kleinschreibung
 - `{{ .Values.var | quote }}`: Stell den Wert der Variablen *var* in der Ausgabe unter Doppelhochkomma
 
-**Note**: Diese Funtionen können auch kaskadiert werden also z.B. `{{ .Values.var | upper ' quote }}`
+**Note**: Diese Funtionen können auch kaskadiert werden also z.B. `{{ .Values.var | upper | quote }}`
 
 ### Einbindung von "named templates"
 
