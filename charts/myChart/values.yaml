@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-hostname: tpl-d.intern.statistik.at 
+hostname: tpl-d.intern.xx.yy 
 
 resources:
   cpu:

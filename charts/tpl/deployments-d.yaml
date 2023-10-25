@@ -1,0 +1,16 @@
+##
+## helm template . --debug -f ./deployments-d.yaml | less
+#####################################################################################
+deployments:
+  rest:
+    replicaCount: 3
+    autoscaling:
+      minReplicas: 2
+    containers:
+      rest:
+        httpPort: 9090
+        env:
+          - name: TEST
+            value: test
+          - name: TEST02
+            value: test02

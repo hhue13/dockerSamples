@@ -44,9 +44,13 @@ spec:
       containers:
         {{- range .containers }}
         - name: {{ .name }}
+          {{- with .env }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- with .securityContext }}
           securityContext:
-            {{- toYaml .securityContext | nindent 12 }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           {{- if .image.registry }}
             {{- $imageRegistry = .image.registry }}
@@ -64,11 +68,11 @@ spec:
           ports:
             {{- if .httpPort }}
             - containerPort: {{ .httpPort }}
-              protocol: TCP
+              protocol: {{ .protocol }}
             {{- end }}
             {{- if .httpsPort }}
             - containerPort: {{ .httpsPort }}
-              protocol: TCP
+              protocol: {{ .protocol }}
             {{- end }}
           {{- if .readinessProbe }}
           {{- if .readinessProbe.enabled }}

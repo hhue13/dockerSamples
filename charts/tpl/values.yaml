@@ -1,7 +1,9 @@
 imageRegistry: epyc.2i.at:18444
+namespace: tpl-d
 
 deployments:
-  - name: template-rest
+  rest:
+    name: template-rest
     replicaCount: 1
     podAnnotations:
       annotation-1: one 
@@ -13,9 +15,21 @@ deployments:
       targetCPUUtilizationPercentage: 80
       # targetMemoryUtilizationPercentage: 80
     containers:
-      - name: template-rest
+      rest:
+        name: template-rest
+        env:
+          - name: TEST
+            value: test
+          - name: TEST02
+            value: test02
+          - name: PLAYER_INITIAL_LIVES
+            valueFrom:
+              configMapKeyRef:
+                name: game-demo
+                key: player_initial_lives
         httpPort: 8080
         httpsPort: 8443
+        protocol: TCP
         image:
           registry: epyc.2i.at:18444
           name: "ubi8-minimal"
@@ -60,13 +74,13 @@ deployments:
           requests:
             cpu: 500m
             memory: 500Mi
-        # securityContext: {}
-          # capabilities:
-          #   drop:
-          #   - ALL
-          # readOnlyRootFilesystem: true
-          # runAsNonRoot: true
-          # runAsUser: 1000
+        ##### securityContext:
+        #####   capabilities:
+        #####     drop:
+        #####     - ALL
+        #####   readOnlyRootFilesystem: true
+        #####   runAsNonRoot: true
+        #####   runAsUser: 1000
         startupProbe:
           enabled: true
           method: "httpGet"
@@ -87,10 +101,27 @@ deployments:
         rolloutStrategy: RollingUpdate
         terminationGracePeriodSeconds: 30
     routes:
-  - name: template-workspace-material
+      rest:
+        hostname: tpl-d.intern.xx.yy
+        name: template-rest
+        path: /rest 
+        port: 8080
+        protocol: TCP
+        servicename: template-rest
+    services:
+      rest:
+        name: template-rest
+        httpPort: 8080 
+        httpTargetPort: 8080 
+        httpsPort: 8443
+        httpsTargetPort: 8443
+        protocol: TCP
+  workspace:
+    name: template-workspace-material
     replicaCount: 1
     containers:
-      - name: template-workspace-material
+      workspacematerial:
+        name: template-workspace-material
         httpPort: 8080
 #        httpsPort: 8443
         image:
@@ -123,6 +154,22 @@ deployments:
         - mountPath: /opt/tomcat/webapps/ROOT/assets/settings.json
           name: volume-rczqn
           subPath: settings.json
+    routes:
+      workspace:
+        hostname: tpl-d.intern.xx.yy
+        name: template-workspace-material
+        path: /
+        port: 8080
+        protocol: TCP
+        servicename: template-workspace-material
+    services:
+      workspace:
+        name: template-workspace-material
+        httpPort: 8080 
+        httpTargetPort: 8080 
+        httpsPort: 8443
+        httpsTargetPort: 8443
+        protocol: TCP
     volumes:
     - configMap:
         defaultMode: 420

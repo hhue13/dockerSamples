@@ -1,0 +1,39 @@
+# Default values for tpl.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+namespace: tpl 
+
+hostname: tpl-d.intern.xx.yy
+
+resources:
+  cpu:
+    requests: 500m 
+    limits: 2 
+  memory:
+    requests: 500Mi
+    limits: 2Gi
+
+probes:
+  httpHeaders:
+    - name: x-version
+      value: "2.0"
+    - name: x-authenticate-userid
+      value: openshift@statistik.gv.at
+    - name: x-authorize-roles
+      value: OpenShift
+
+
+routes:
+  - name: template-rest
+    path: /rest 
+    port:
+      number: 8080
+      protocol: TCP
+    servicename: template-rest
+  - name: template-workspace-material
+    path: /
+    port:
+      number: 8080
+      protocol: TCP
+    servicename: template-workspace-material

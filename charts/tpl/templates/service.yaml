@@ -1,0 +1,31 @@
+{{- $thisChart := .Chart }}
+{{- $thisRelease := .Release }}
+{{- $appName := "dummy" }}
+
+{{- range .Values.deployments }}
+{{- $appName = .name }}
+{{- range .services }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ $appName }}
+  name: {{ .name }}
+  namespace: {{ $.Values.namespace }}
+spec:
+  ports:
+  - name: {{ .httpPort }}-{{ .protocol | lower }}
+    port: {{ .httpPort }}
+    protocol: {{ .protocol }}
+    targetPort: {{ .httpTargetPort }}
+  - name: {{ .httpsPort }}-{{ .protocol | lower }}
+    port: {{ .httpsPort }}
+    protocol: {{ .protocol }}
+    targetPort: {{ .httpsTargetPort }}
+  selector:
+    {{- include "tpl.selectorLabels" (list $ $thisChart $thisRelease $appName) | nindent 4 }}
+  sessionAffinity: None
+  type: ClusterIP
+{{- end }}
+{{- end }}
