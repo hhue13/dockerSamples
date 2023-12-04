@@ -6,6 +6,8 @@ Helm ist also ein ein **templating tool** mit dem Manifests für das Deployment 
 
 Die detailierte Dokumentation ist auf der [Helm Docs](https://helm.sh/docs/) Seite zu finden.
 
+Helm verwemndet die "Go templating engine" und die Funktionen der [Sprig library](https://pkg.go.dev/github.com/masterminds/sprig). Daher können auch diese Funktionen in den Templates verwendet werden.
+
 ## Helm CLI
 
 Helm kann von der Kommandozeile mit dem Befehl `helm` bedient werden.
