@@ -11,6 +11,7 @@ app.kubernetes.io/instance: {{ $thisRelease.Name }}
 app.kubernetes.io/version: "{{ $thisChart.AppVersion }}"
 app.kubernetes.io/managed-by: {{ $thisRelease.Service }}
 dummy-label: "new-label"
+argocd.argoproj.io/managed-by: dev-argocd
 {{- end }}
 
 {{/*
