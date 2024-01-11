@@ -10,7 +10,7 @@ app.kubernetes.io/name: {{ default $thisChart.Name | trunc 63 | trimSuffix "-" }
 app.kubernetes.io/instance: {{ $thisRelease.Name }}
 app.kubernetes.io/version: "{{ $thisChart.AppVersion }}"
 app.kubernetes.io/managed-by: {{ $thisRelease.Service }}
-
+dummy-label: "new-label"
 {{- end }}
 
 {{/*
